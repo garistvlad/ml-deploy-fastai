@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% from "macros.jinja" import plot_barchart %}
+{% block title %}DC | MARVEL | TMNT{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="jumbotron text-center mb-2">
+        <h1 class="display-4">Predict comics by Image URL</h1>
+        <p>DC | MARVEL | TMNT</p>
+    </div>
+
+    <form class="form mb-4" method="post">
+        <div class="row">
+            <div class="col-10">
+                <input type="url" class="form-control form-control-lg" id="image_url" name="image_url" placeholder="URL for image">
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-block btn-lg btn-primary">Predict</button>
+            </div>
+        </div>
+    </form>
+    
+    {% if yhat_probas %}
+    <div class="row d-flex align-items-center">
+        <div class="col-7">
+            <p class="text-center">Prediction: <i><b>{{ class_name }}</b></i></p>
+            <canvas id="myChart"></canvas>
+        </div>
+        <div class="col">
+            <img class="img-responsive" src="{{ url }}">
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% block chartjs %}
+    {% if yhat_probas %}
+    {{ plot_barchart(prob_dc=yhat_probas.get("DC"), prob_marvel=yhat_probas.get("Marvel"), prob_tmnt=yhat_probas.get("TMNT")) }}
+    {% endif %}
+{% endblock %}
+
+{% endblock %}
